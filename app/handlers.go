@@ -7,22 +7,15 @@ import (
 	"github.com/dimiro1/x/xhttp"
 	"github.com/dimiro1/x/xlog"
 	"github.com/dimiro1/x/xtemplate"
-	"go.uber.org/fx"
 )
 
-type IndexMiddleware struct {
-	fx.In
-
-	Compress xhttp.Middleware `name:"x_compress_middleware"`
-}
-
-func Index(indexMiddleware IndexMiddleware, logger xlog.OptionalLogger) xhttp.RouteMapping {
+func Index(compress xhttp.CompressMiddleware, logger xlog.OptionalLogger) xhttp.RouteMapping {
 	return xhttp.RouteMapping{
 		Route: &xhttp.Route{
 			Path:   "/",
 			Method: http.MethodGet,
 			Middleware: []xhttp.Middleware{
-				indexMiddleware.Compress,
+				compress,
 			},
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				if xlog.IsProvided(logger) {
@@ -44,7 +37,7 @@ func About(logger xlog.OptionalLogger, template xtemplate.Template) xhttp.RouteM
 					logger.Logger.Println("serving /about")
 				}
 
-				template.Template.ExecuteTemplate(w, "about.html", "Hello From About")
+				template.ExecuteTemplate(w, "about.html", "Hello From About")
 			}),
 		},
 	}
