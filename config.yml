@@ -1,3 +1,6 @@
 xdb:
   driver: "sqlite3"
   dsn: ":memory:"
+
+xbanner:
+  enabled: false

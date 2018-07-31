@@ -8,23 +8,9 @@ import (
 )
 
 func Uppercase() xtemplate.FuncMapping {
-	return xtemplate.FuncMapping{
-		Func: &xtemplate.Func{
-			Name: "upper",
-			Func: func(s string) string {
-				return strings.ToUpper(s)
-			},
-		},
-	}
+	return xtemplate.Register("upper", strings.ToUpper)
 }
 
 func Slugify() xtemplate.FuncMapping {
-	return xtemplate.FuncMapping{
-		Func: &xtemplate.Func{
-			Name: "slugify",
-			Func: func(s string) string {
-				return slugify.Slugify(s)
-			},
-		},
-	}
+	return xtemplate.Register("slugify", slugify.Slugify)
 }
