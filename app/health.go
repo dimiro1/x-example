@@ -7,33 +7,18 @@ import (
 )
 
 func GoogleHealthCheck() xhealth.CheckMapping {
-	return xhealth.CheckMapping{
-		Checker: &xhealth.Checker{
-			Name:    "google",
-			Checker: url.NewChecker("http://www.google.com"),
-		},
-	}
+	return xhealth.Register("google", url.NewChecker("http://www.google.com"))
 }
 
 func HelloFreshHealthCheck() xhealth.CheckMapping {
-	return xhealth.CheckMapping{
-		Checker: &xhealth.Checker{
-			Name:    "hellofresh",
-			Checker: url.NewChecker("http://www.hellofresh.com"),
-		},
-	}
+	return xhealth.Register("hellofresh", url.NewChecker("http://www.hellofresh.com"))
 }
 
 func CustomHealthCheck() xhealth.CheckMapping {
-	return xhealth.CheckMapping{
-		Checker: &xhealth.Checker{
-			Name: "custom",
-			Checker: health.CheckerFunc(func() health.Health {
-				h := health.NewHealth()
-				h.AddInfo("message", "Hello World")
-				h.Up()
-				return h
-			}),
-		},
-	}
+	return xhealth.Register("custom", health.CheckerFunc(func() health.Health {
+		h := health.NewHealth()
+		h.AddInfo("message", "Hello World")
+		h.Up()
+		return h
+	}))
 }

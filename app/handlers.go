@@ -17,35 +17,20 @@ type IndexMiddleware struct {
 }
 
 func Index(indexMiddleware IndexMiddleware, logger xlog.OptionalLogger) xhttp.RouteMapping {
-	return xhttp.RouteMapping{
-		Route: &xhttp.Route{
-			Path:   "/",
-			Method: http.MethodGet,
-			Middleware: []xhttp.Middleware{
-				indexMiddleware.Compress,
-			},
-			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if xlog.IsProvided(logger) {
-					logger.Logger.Println("serving /")
-				}
-				io.WriteString(w, "Index Page")
-			}),
-		},
-	}
+	return xhttp.GET("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if xlog.IsProvided(logger) {
+			logger.Logger.Println("serving /")
+		}
+		io.WriteString(w, "Index Page")
+	}), xhttp.WithMiddleware(indexMiddleware.Compress))
 }
 
 func About(logger xlog.OptionalLogger, template xtemplate.Template) xhttp.RouteMapping {
-	return xhttp.RouteMapping{
-		Route: &xhttp.Route{
-			Path:   "/about",
-			Method: http.MethodGet,
-			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				if xlog.IsProvided(logger) {
-					logger.Logger.Println("serving /about")
-				}
+	return xhttp.GET("/about", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if xlog.IsProvided(logger) {
+			logger.Logger.Println("serving /about")
+		}
 
-				template.Template.ExecuteTemplate(w, "about.html", "Hello From About")
-			}),
-		},
-	}
+		template.Template.ExecuteTemplate(w, "about.html", "Hello From About")
+	}))
 }
