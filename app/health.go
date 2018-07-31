@@ -7,15 +7,15 @@ import (
 )
 
 func GoogleHealthCheck() xhealth.CheckMapping {
-	return xhealth.Register("google", url.NewChecker("http://www.google.com"))
+	return xhealth.NewCheckMapping("google", url.NewChecker("http://www.google.com"))
 }
 
 func HelloFreshHealthCheck() xhealth.CheckMapping {
-	return xhealth.Register("hellofresh", url.NewChecker("http://www.hellofresh.com"))
+	return xhealth.NewCheckMapping("hellofresh", url.NewChecker("http://www.hellofresh.com"))
 }
 
 func CustomHealthCheck() xhealth.CheckMapping {
-	return xhealth.Register("custom", health.CheckerFunc(func() health.Health {
+	return xhealth.NewCheckMapping("custom", health.CheckerFunc(func() health.Health {
 		h := health.NewHealth()
 		h.AddInfo("message", "Hello World")
 		h.Up()
