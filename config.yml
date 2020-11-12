@@ -3,4 +3,4 @@ xdb:
   dsn: ":memory:"
 
 xbanner:
-  enabled: false
+  enabled: true
